@@ -33,7 +33,15 @@ def boottime(): # Get the boot_time
     return computer.boot_time
 
 
+def gettemp(): # Get the load
+    return str(computer.processor.temperature)
+
+
+def getload(): # Get the CPU Temp
+    return str(computer.processor.load)
+
 # Notification Main Section
+
 
 @click.command()
 @click.option('--os', is_flag=True, help="Lists the OS Details")
@@ -43,10 +51,11 @@ def boottime(): # Get the boot_time
 @click.option('--python', is_flag=True, help="Lists the python version being used")
 @click.option('--uptime', '-ut', is_flag=True, help="Lists the uptime")
 @click.option('--bt', is_flag=True, help="Lists the boot time")
+@click.option('--temp', is_flag=True, help="Lists the CPU temperatures")
+@click.option('--load', is_flag=True, help="Lists the CPU load")
 
 
-
-def cli(os,processor,arch,host,python,uptime,bt) :
+def cli(os,processor,arch,host,python,uptime,bt,temp,load) :
 
     if os:
         r = os_details()
@@ -69,7 +78,12 @@ def cli(os,processor,arch,host,python,uptime,bt) :
     elif bt:
         b = boottime()
         notifier.send_notification("Boot time", b)
-
+    elif temp:
+        t = gettemp()
+        notifier.send_notification("Temperature in Celcius", t)
+    elif load:
+        l = getload()
+        notifier.send_notification("CPU load in %", l)
 
 if __name__ == '__main__':
     cli()
